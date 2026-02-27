@@ -11109,10 +11109,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1753143743}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -790.46}
-  m_SizeDelta: {x: 700, y: 700}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 0}
+  m_AnchoredPosition: {x: 0, y: 264.04004}
+  m_SizeDelta: {x: 500, y: 500}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1455742823
 MonoBehaviour:
@@ -13304,12 +13304,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1080, y: 1920}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -14729,6 +14729,7 @@ MonoBehaviour:
   gameOverPanel: {fileID: 1521853469}
   winPanel: {fileID: 153665526}
   hudPanel: {fileID: 1828378769}
+  pausePanel: {fileID: 0}
 --- !u!4 &1934008021
 Transform:
   m_ObjectHideFlags: 0
@@ -16206,12 +16207,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   carController: {fileID: 2106450326}
   steeringWheel: {fileID: 1455742823}
-  motorTorque: 200
-  maxSpeed: 80
-  turnTorque: 2000
-  fullTurnSpeed: 10
   driftThreshold: 0.5
-  driftTurnBoost: 1000
 --- !u!4 &2106450330 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 261786959625234688, guid: 79d0ca8b77e301442afdb49f102e8aed, type: 3}
