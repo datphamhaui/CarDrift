@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using TMPro;
 
 public class LoadingScene : MonoBehaviour
 {
@@ -10,7 +11,7 @@ public class LoadingScene : MonoBehaviour
 
     [Header("UI References")]
     public Slider progressBar;
-    public Text   progressText;
+    public TMP_Text progressText;
 
     [Header("Settings")]
     [Range(1f, 10f)]
