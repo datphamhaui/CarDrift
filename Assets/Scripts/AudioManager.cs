@@ -21,9 +21,13 @@ public class AudioManager : MonoBehaviour
 
     const string MUSIC_KEY = "music_enabled";
     const string SFX_KEY   = "sfx_enabled";
+    const string MUSIC_VOL_KEY = "music_volume";
+    const string SFX_VOL_KEY   = "sfx_volume";
 
     public bool IsMusicOn { get; private set; }
     public bool IsSfxOn   { get; private set; }
+    public float MusicVolume { get; private set; }
+    public float SfxVolume   { get; private set; }
 
     void Awake()
     {
@@ -37,6 +41,8 @@ public class AudioManager : MonoBehaviour
 
         IsMusicOn = PlayerPrefs.GetInt(MUSIC_KEY, 1) == 1;
         IsSfxOn   = PlayerPrefs.GetInt(SFX_KEY, 1) == 1;
+        MusicVolume = PlayerPrefs.GetFloat(MUSIC_VOL_KEY, 0.5f);
+        SfxVolume   = PlayerPrefs.GetFloat(SFX_VOL_KEY, 1f);
 
         ApplyMusicState();
     }
@@ -75,10 +81,21 @@ public class AudioManager : MonoBehaviour
         if (musicSource != null) musicSource.Stop();
     }
 
+    public void SetMusicVolume(float volume)
+    {
+        MusicVolume = Mathf.Clamp01(volume);
+        PlayerPrefs.SetFloat(MUSIC_VOL_KEY, MusicVolume);
+        PlayerPrefs.Save();
+        ApplyMusicState();
+    }
+
     void ApplyMusicState()
     {
         if (musicSource != null)
+        {
             musicSource.mute = !IsMusicOn;
+            musicSource.volume = MusicVolume;
+        }
     }
 
     // --- SFX ---
@@ -97,10 +114,18 @@ public class AudioManager : MonoBehaviour
         PlayerPrefs.Save();
     }
 
+    public void SetSfxVolume(float volume)
+    {
+        SfxVolume = Mathf.Clamp01(volume);
+        PlayerPrefs.SetFloat(SFX_VOL_KEY, SfxVolume);
+        PlayerPrefs.Save();
+        if (sfxSource != null) sfxSource.volume = SfxVolume;
+    }
+
     public void PlaySfx(AudioClip clip)
     {
         if (sfxSource == null || clip == null || !IsSfxOn) return;
-        sfxSource.PlayOneShot(clip);
+        sfxSource.PlayOneShot(clip, SfxVolume);
     }
 
     // --- Shortcut methods ---

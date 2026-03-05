@@ -18,9 +18,13 @@ public class GameUI : MonoBehaviour
 
     [Header("Pause Panel")]
     public Button resumeButton;
+    public Button pauseSettingsButton;
     public Button pauseRestartButton;
     public Button pauseSelectButton;
     public Button pauseHomeButton;
+
+    [Header("Settings")]
+    public SettingsPopup settingsPopup;
 
     [Header("Game Over Panel")]
     public Button gameOverRestartButton;
@@ -40,6 +44,7 @@ public class GameUI : MonoBehaviour
 
         // Pause
         Wire(resumeButton,       () => GameManager.Instance.ResumeGame());
+        Wire(pauseSettingsButton, () => { if (settingsPopup != null) settingsPopup.Open(); });
         Wire(pauseRestartButton, () => GameManager.Instance.RestartLevel());
         Wire(pauseSelectButton,  () => GameManager.Instance.LoadSelectScene());
         Wire(pauseHomeButton,    () => GameManager.Instance.LoadMainMenu());
