@@ -15,6 +15,7 @@ public class GameUI : MonoBehaviour
 {
     [Header("HUD")]
     public Button pauseButton;
+    public Slider hpSlider;
 
     [Header("Pause Panel")]
     public Button resumeButton;
@@ -41,6 +42,7 @@ public class GameUI : MonoBehaviour
     {
         // HUD
         Wire(pauseButton, () => GameManager.Instance.PauseGame());
+        SetupHPSlider();
 
         // Pause
         Wire(resumeButton,       () => GameManager.Instance.ResumeGame());
@@ -59,6 +61,21 @@ public class GameUI : MonoBehaviour
         Wire(winRestartButton, () => GameManager.Instance.RestartLevel());
         Wire(winSelectButton,  () => GameManager.Instance.LoadSelectScene());
         Wire(winHomeButton,    () => GameManager.Instance.LoadMainMenu());
+    }
+
+    void SetupHPSlider()
+    {
+        if (hpSlider == null || GameManager.Instance == null) return;
+
+        hpSlider.minValue = 0;
+        hpSlider.maxValue = GameManager.Instance.maxHP;
+        hpSlider.value = GameManager.Instance.maxHP;
+        hpSlider.interactable = false;
+
+        GameManager.Instance.OnHPChanged += (current, max) =>
+        {
+            if (hpSlider != null) hpSlider.value = current;
+        };
     }
 
     void Wire(Button btn, UnityEngine.Events.UnityAction action)

@@ -5,10 +5,6 @@ public class AudioManager : MonoBehaviour
 {
     public static AudioManager instance;
 
-    [Header("Audio Sources")]
-    public AudioSource musicSource;
-    public AudioSource sfxSource;
-
     [Header("Music Clips")]
     public AudioClip menuMusic;
     public AudioClip gameMusic;
@@ -18,6 +14,9 @@ public class AudioManager : MonoBehaviour
     public AudioClip winSfx;
     public AudioClip loseSfx;
     public AudioClip driftSfx;
+
+    AudioSource musicSource;
+    AudioSource sfxSource;
 
     const string MUSIC_KEY = "music_enabled";
     const string SFX_KEY   = "sfx_enabled";
@@ -38,6 +37,18 @@ public class AudioManager : MonoBehaviour
         }
         instance = this;
         DontDestroyOnLoad(gameObject);
+
+        // Auto-create AudioSources
+        var musicGO = new GameObject("Music");
+        musicGO.transform.SetParent(transform);
+        musicSource = musicGO.AddComponent<AudioSource>();
+        musicSource.playOnAwake = false;
+        musicSource.loop = true;
+
+        var sfxGO = new GameObject("SFX");
+        sfxGO.transform.SetParent(transform);
+        sfxSource = sfxGO.AddComponent<AudioSource>();
+        sfxSource.playOnAwake = false;
 
         IsMusicOn = PlayerPrefs.GetInt(MUSIC_KEY, 1) == 1;
         IsSfxOn   = PlayerPrefs.GetInt(SFX_KEY, 1) == 1;

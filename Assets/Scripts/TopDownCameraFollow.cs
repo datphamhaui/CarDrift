@@ -7,7 +7,7 @@ public class TopDownCameraFollow : MonoBehaviour
 
     [Header("Camera Settings")]
     public Vector3 offset = new Vector3(0f, 15f, -8f);
-    [Range(60f, 85f)]
+    [Range(30f, 85f)]
     public float lookDownAngle = 65f;
     [Range(1f, 15f)]
     public float followSpeed = 5f;

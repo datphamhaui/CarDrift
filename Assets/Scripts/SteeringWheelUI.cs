@@ -9,7 +9,7 @@ public class SteeringWheelUI : MonoBehaviour, IPointerDownHandler, IDragHandler,
     [Range(2f, 20f)]
     public float returnSpeed = 10f;
     [Tooltip("How many pixels of horizontal drag equals full steering")]
-    [Range(50f, 400f)]
+    [Range(50f, 800f)]
     public float dragRange = 200f;
 
     public float SteeringAmount { get; private set; }

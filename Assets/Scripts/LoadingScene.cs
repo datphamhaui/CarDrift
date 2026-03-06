@@ -27,6 +27,9 @@ public class LoadingScene : MonoBehaviour
 
     void Start()
     {
+        if (AudioManager.instance != null)
+            AudioManager.instance.PlayMusic(AudioManager.instance.menuMusic);
+
         if (!string.IsNullOrEmpty(targetSceneOverride))
         {
             nextSceneName = targetSceneOverride;

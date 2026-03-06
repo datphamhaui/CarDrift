@@ -15,14 +15,19 @@ public class GameManager : MonoBehaviour
     public GameObject hudPanel;
     public GameObject pausePanel;
 
+    [Header("HP")]
+    public int maxHP = 3;
+
     public GameState CurrentState { get; private set; } = GameState.Ready;
     public bool IsPaused => CurrentState == GameState.Paused;
+    public int CurrentHP { get; private set; }
 
     public event Action OnGameStart;
     public event Action OnGameOver;
     public event Action OnGameWin;
     public event Action OnGamePause;
     public event Action OnGameResume;
+    public event Action<int, int> OnHPChanged; // (currentHP, maxHP)
 
     void Awake()
     {
@@ -38,6 +43,9 @@ public class GameManager : MonoBehaviour
     {
         Time.timeScale = 1f;
         SetState(GameState.Ready);
+
+        if (AudioManager.instance != null)
+            AudioManager.instance.PlayMusic(AudioManager.instance.gameMusic);
     }
 
     void Update()
@@ -51,6 +59,8 @@ public class GameManager : MonoBehaviour
     public void StartGame()
     {
         Time.timeScale = 1f;
+        CurrentHP = maxHP;
+        OnHPChanged?.Invoke(CurrentHP, maxHP);
         SetState(GameState.Playing);
         OnGameStart?.Invoke();
     }
@@ -71,6 +81,17 @@ public class GameManager : MonoBehaviour
         SetState(GameState.Playing);
         Time.timeScale = 1f;
         OnGameResume?.Invoke();
+    }
+
+    public void TakeDamage(int damage = 1)
+    {
+        if (CurrentState != GameState.Playing) return;
+
+        CurrentHP = Mathf.Max(0, CurrentHP - damage);
+        OnHPChanged?.Invoke(CurrentHP, maxHP);
+
+        if (CurrentHP <= 0)
+            TriggerGameOver();
     }
 
     public void TriggerGameOver()

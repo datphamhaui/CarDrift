@@ -4,6 +4,7 @@ public class ObstacleCollision : MonoBehaviour
 {
     [Header("Settings")]
     public float minSpeedToTrigger = 5f;
+    public int damage = 1;
 
     void OnCollisionEnter(Collision collision)
     {
@@ -12,12 +13,11 @@ public class ObstacleCollision : MonoBehaviour
 
         if (collision.gameObject.CompareTag("Obstacle") || collision.gameObject.CompareTag("Wall"))
         {
-            // Only trigger game over if moving fast enough
             var car = GetComponent<PrometeoCarController>();
             if (car != null && Mathf.Abs(car.carSpeed) < minSpeedToTrigger)
                 return;
 
-            GameManager.Instance.TriggerGameOver();
+            GameManager.Instance.TakeDamage(damage);
         }
     }
 }

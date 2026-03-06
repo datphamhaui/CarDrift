@@ -25,8 +25,19 @@ public class SelectScene : MonoBehaviour
 
     void Start()
     {
-        selectButton.onClick.AddListener(OnSelectPressed);
-        backButton.onClick.AddListener(() => SceneManager.LoadScene(backSceneName));
+        if (AudioManager.instance != null)
+            AudioManager.instance.PlayMusic(AudioManager.instance.menuMusic);
+
+        selectButton.onClick.AddListener(() =>
+        {
+            if (AudioManager.instance != null) AudioManager.instance.PlayButtonClick();
+            OnSelectPressed();
+        });
+        backButton.onClick.AddListener(() =>
+        {
+            if (AudioManager.instance != null) AudioManager.instance.PlayButtonClick();
+            SceneManager.LoadScene(backSceneName);
+        });
 
         // Restore last selection
         int savedIndex = PlayerPrefs.GetInt(SELECTED_KEY, 0);

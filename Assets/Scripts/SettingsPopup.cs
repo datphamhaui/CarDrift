@@ -60,6 +60,7 @@ public class SettingsPopup : MonoBehaviour
 
     public void Open()
     {
+        if (AudioManager.instance != null) AudioManager.instance.PlayButtonClick();
         if (settingsPanel != null) settingsPanel.SetActive(true);
         savedTimeScale = Time.timeScale;
         Time.timeScale = 0f;
@@ -68,6 +69,7 @@ public class SettingsPopup : MonoBehaviour
 
     public void Close()
     {
+        if (AudioManager.instance != null) AudioManager.instance.PlayButtonClick();
         if (settingsPanel != null) settingsPanel.SetActive(false);
         Time.timeScale = savedTimeScale;
     }
