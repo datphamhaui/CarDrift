@@ -6112,22 +6112,22 @@ MonoBehaviour:
   levels:
   - levelId: 0
     isUnlocked: 1
-    sceneName: GamePlay
+    sceneName: Map_1
   - levelId: 1
     isUnlocked: 0
-    sceneName: GamePlay
+    sceneName: Map_2
   - levelId: 2
     isUnlocked: 0
-    sceneName: GamePlay
+    sceneName: Map_3
   - levelId: 3
     isUnlocked: 0
-    sceneName: GamePlay
+    sceneName: Map_4
   - levelId: 4
     isUnlocked: 0
-    sceneName: GamePlay
+    sceneName: Map_5
   - levelId: 5
     isUnlocked: 0
-    sceneName: GamePlay
+    sceneName: Map_6
 --- !u!4 &1930710685
 Transform:
   m_ObjectHideFlags: 0

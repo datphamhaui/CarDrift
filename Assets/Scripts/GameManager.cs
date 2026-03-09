@@ -126,8 +126,15 @@ public class GameManager : MonoBehaviour
 
         if (ProgressManager.instance != null)
         {
-            int currentLevel = SceneManager.GetActiveScene().buildIndex;
-            ProgressManager.instance.CompleteLevel(currentLevel);
+            // Level number = panelIndex + 1, panelIndex is stored in PlayerPrefs
+            int level = PlayerPrefs.GetInt("selected_map", 0) + 1;
+            Debug.Log($"[GameManager] TriggerWin: selected_map={level - 1}, level={level}, completing -> unlock level {level + 1}");
+            ProgressManager.instance.CompleteLevel(level);
+            Debug.Log($"[GameManager] After CompleteLevel: unlocked_level={ProgressManager.instance.GetUnlockedLevel()}");
+        }
+        else
+        {
+            Debug.LogWarning("[GameManager] TriggerWin: ProgressManager.instance is NULL!");
         }
     }
 

@@ -7,9 +7,9 @@ using UnityEngine.UI;
 ///
 /// Setup:
 ///   HUD Panel:      pauseButton
-///   Pause Panel:    resumeButton, pauseRestartButton, pauseSelectButton, pauseHomeButton
-///   GameOver Panel: gameOverRestartButton, gameOverSelectButton, gameOverHomeButton
-///   Win Panel:      nextLevelButton, winRestartButton, winSelectButton, winHomeButton
+///   Pause Panel:    continueButton, pauseRestartButton, quitButton
+///   GameOver Panel: gameOverHomeButton, gameOverRestartButton
+///   Win Panel:      winHomeButton, nextLevelButton
 /// </summary>
 public class GameUI : MonoBehaviour
 {
@@ -18,25 +18,17 @@ public class GameUI : MonoBehaviour
     public Slider hpSlider;
 
     [Header("Pause Panel")]
-    public Button resumeButton;
-    public Button pauseSettingsButton;
+    public Button continueButton;
     public Button pauseRestartButton;
-    public Button pauseSelectButton;
-    public Button pauseHomeButton;
-
-    [Header("Settings")]
-    public SettingsPopup settingsPopup;
+    public Button quitButton;
 
     [Header("Game Over Panel")]
-    public Button gameOverRestartButton;
-    public Button gameOverSelectButton;
     public Button gameOverHomeButton;
+    public Button gameOverRestartButton;
 
     [Header("Win Panel")]
-    public Button nextLevelButton;
-    public Button winRestartButton;
-    public Button winSelectButton;
     public Button winHomeButton;
+    public Button nextLevelButton;
 
     void Start()
     {
@@ -45,22 +37,17 @@ public class GameUI : MonoBehaviour
         SetupHPSlider();
 
         // Pause
-        Wire(resumeButton,       () => GameManager.Instance.ResumeGame());
-        Wire(pauseSettingsButton, () => { if (settingsPopup != null) settingsPopup.Open(); });
+        Wire(continueButton,    () => GameManager.Instance.ResumeGame());
         Wire(pauseRestartButton, () => GameManager.Instance.RestartLevel());
-        Wire(pauseSelectButton,  () => GameManager.Instance.LoadSelectScene());
-        Wire(pauseHomeButton,    () => GameManager.Instance.LoadMainMenu());
+        Wire(quitButton,         () => GameManager.Instance.LoadSelectScene());
 
         // Game Over
-        Wire(gameOverRestartButton, () => GameManager.Instance.RestartLevel());
-        Wire(gameOverSelectButton,  () => GameManager.Instance.LoadSelectScene());
         Wire(gameOverHomeButton,    () => GameManager.Instance.LoadMainMenu());
+        Wire(gameOverRestartButton, () => GameManager.Instance.RestartLevel());
 
         // Win
+        Wire(winHomeButton,   () => GameManager.Instance.LoadMainMenu());
         Wire(nextLevelButton,  () => GameManager.Instance.LoadNextLevel());
-        Wire(winRestartButton, () => GameManager.Instance.RestartLevel());
-        Wire(winSelectButton,  () => GameManager.Instance.LoadSelectScene());
-        Wire(winHomeButton,    () => GameManager.Instance.LoadMainMenu());
     }
 
     void SetupHPSlider()
