@@ -14,6 +14,7 @@ public class AudioManager : MonoBehaviour
     public AudioClip winSfx;
     public AudioClip loseSfx;
     public AudioClip driftSfx;
+    public AudioClip coinPickupSfx;
 
     AudioSource musicSource;
     AudioSource sfxSource;
@@ -145,4 +146,5 @@ public class AudioManager : MonoBehaviour
     public void PlayWin()         => PlaySfx(winSfx);
     public void PlayLose()        => PlaySfx(loseSfx);
     public void PlayDrift()       => PlaySfx(driftSfx);
+    public void PlayCoinPickup()  => PlaySfx(coinPickupSfx);
 }

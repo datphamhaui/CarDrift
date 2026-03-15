@@ -52,6 +52,18 @@ public class MapGenerator : MonoBehaviour
     [Tooltip("Random scale range")]
     public Vector2 scaleRange = new Vector2(0.8f, 1.2f);
 
+    [Header("=== COINS ===")]
+    [Tooltip("Coin prefab to place along the road")]
+    public GameObject coinPrefab;
+    [Tooltip("Number of coins to place along the path")]
+    [Range(5, 100)]
+    public int coinCount = 30;
+    [Tooltip("Height of coins above ground")]
+    public float coinHeight = 1f;
+    [Tooltip("How far coins can spread from road center (0-1 of half road width)")]
+    [Range(0f, 0.9f)]
+    public float coinSpreadRatio = 0.6f;
+
     [Header("=== SPAWN & GOAL ===")]
     [Tooltip("Drag the car object here so obstacles avoid its position")]
     public Transform carTransform;
@@ -97,6 +109,7 @@ public class MapGenerator : MonoBehaviour
         GenerateGround();
         GenerateWalls();
         GenerateObstacles();
+        GenerateCoins();
         GenerateGoal();
 
         Debug.Log($"[MapGenerator] Map generated! Size={MapWidth}x{MapLength}, path with {generatedPath.Count} waypoints, {obstacleCount} obstacles");
@@ -529,6 +542,72 @@ public class MapGenerator : MonoBehaviour
 
         SetTagRecursive(obstacle, "Obstacle");
         placedPositions.Add(pos);
+    }
+
+    void GenerateCoins()
+    {
+        if (coinPrefab == null || generatedPath.Count < 2) return;
+
+        var coinParent = new GameObject("Coins");
+        coinParent.transform.SetParent(generatedRoot);
+        coinParent.transform.localPosition = Vector3.zero;
+
+        Vector3 spawnWorld = GetSpawnPosition();
+        Vector3 goalWorld = GetGoalPosition();
+        float halfRoad = roadWidth / 2f * coinSpreadRatio;
+
+        // Calculate total path length
+        float totalLength = 0f;
+        for (int i = 0; i < generatedPath.Count - 1; i++)
+            totalLength += Vector3.Distance(generatedPath[i], generatedPath[i + 1]);
+
+        float spacing = totalLength / (coinCount + 1);
+        int placed = 0;
+        float accumulated = 0f;
+        float nextCoinAt = spacing;
+
+        for (int seg = 0; seg < generatedPath.Count - 1; seg++)
+        {
+            Vector3 segStart = generatedPath[seg];
+            Vector3 segEnd = generatedPath[seg + 1];
+            Vector3 segDir = (segEnd - segStart).normalized;
+            float segLength = Vector3.Distance(segStart, segEnd);
+            Vector3 perp = new Vector3(-segDir.z, 0f, segDir.x);
+
+            float walked = 0f;
+            while (walked < segLength && placed < coinCount)
+            {
+                float remaining = nextCoinAt - accumulated;
+                if (remaining > segLength - walked)
+                {
+                    accumulated += segLength - walked;
+                    break;
+                }
+
+                walked += remaining;
+                accumulated = nextCoinAt;
+                nextCoinAt += spacing;
+
+                Vector3 center = segStart + segDir * walked;
+
+                // Skip coins too close to spawn or goal
+                if (Vector3.Distance(center, spawnWorld) < clearZoneRadius) continue;
+                if (Vector3.Distance(center, goalWorld) < clearZoneRadius) continue;
+
+                // Random lateral offset within road
+                float lateralOffset = Random.Range(-halfRoad, halfRoad);
+                Vector3 pos = center + perp * lateralOffset;
+                pos.y = coinHeight;
+
+                var coin = (GameObject)UnityEditor.PrefabUtility.InstantiatePrefab(coinPrefab);
+                coin.transform.SetParent(coinParent.transform);
+                coin.transform.position = pos;
+                coin.tag = "Coin";
+                placed++;
+            }
+        }
+
+        Debug.Log($"[MapGenerator] Placed {placed} coins along path");
     }
 
     void GenerateGoal()

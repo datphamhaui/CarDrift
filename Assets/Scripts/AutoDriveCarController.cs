@@ -10,7 +10,15 @@ public class AutoDriveCarController : MonoBehaviour
     [Range(0.3f, 0.8f)]
     public float driftThreshold = 0.5f;
 
+    [Header("Stuck Detection")]
+    [Tooltip("Check interval in seconds")]
+    public float stuckCheckInterval = 2f;
+    [Tooltip("If car moves less than this distance in the interval, it's stuck")]
+    public float stuckDistanceThreshold = 3f;
+
     bool isActive;
+    float stuckCheckTimer;
+    Vector3 lastCheckPosition;
 
     // Fake touch input objects - we control these to feed input to PrometeoCarController
     PrometeoTouchInput throttlePTI;
@@ -96,6 +104,8 @@ public class AutoDriveCarController : MonoBehaviour
     void OnGameStart()
     {
         isActive = true;
+        stuckCheckTimer = 0f;
+        lastCheckPosition = transform.position;
 
         if (ScoreManager.Instance != null)
             ScoreManager.Instance.StartScoring();
@@ -115,22 +125,34 @@ public class AutoDriveCarController : MonoBehaviour
             return;
         }
 
-        float steering = 0f;
+        // --- STUCK DETECTION: game over if car barely moved ---
+        stuckCheckTimer += Time.deltaTime;
+        if (stuckCheckTimer >= stuckCheckInterval)
+        {
+            float movedDistance = Vector3.Distance(transform.position, lastCheckPosition);
+            if (movedDistance < stuckDistanceThreshold && GameManager.Instance != null)
+            {
+                GameManager.Instance.TriggerGameOver();
+                return;
+            }
+            lastCheckPosition = transform.position;
+            stuckCheckTimer = 0f;
+        }
+
+        // --- NORMAL DRIVING ---
+        float steer = 0f;
         if (steeringWheel != null)
-            steering = steeringWheel.SteeringAmount;
+            steer = steeringWheel.SteeringAmount;
 
-        float absSteering = Mathf.Abs(steering);
+        float absSteer = Mathf.Abs(steer);
 
-        // --- THROTTLE: always pressed (auto-drive forward) ---
         throttlePTI.buttonPressed = true;
         reversePTI.buttonPressed = false;
 
-        // --- STEERING: left or right based on steering wheel ---
-        turnLeftPTI.buttonPressed = steering < -0.05f;
-        turnRightPTI.buttonPressed = steering > 0.05f;
+        turnLeftPTI.buttonPressed = steer < -0.05f;
+        turnRightPTI.buttonPressed = steer > 0.05f;
 
-        // --- HANDBRAKE: auto-drift when steering hard ---
-        handbrakePTI.buttonPressed = absSteering > driftThreshold;
+        handbrakePTI.buttonPressed = absSteer > driftThreshold;
     }
 
     void ReleaseAllButtons()
