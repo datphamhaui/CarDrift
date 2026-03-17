@@ -121,7 +121,6 @@ public class CoinGenerator : MonoBehaviour
 
         // Add coin script
         var collectible = coin.AddComponent<CoinCollectible>();
-        collectible.scoreValue = coinScoreValue;
 
         return coin;
     }

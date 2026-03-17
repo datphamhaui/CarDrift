@@ -15,6 +15,8 @@ public class AudioManager : MonoBehaviour
     public AudioClip loseSfx;
     public AudioClip driftSfx;
     public AudioClip coinPickupSfx;
+    public AudioClip fuelPickupSfx;
+    public AudioClip heartPickupSfx;
 
     AudioSource musicSource;
     AudioSource sfxSource;
@@ -142,9 +144,11 @@ public class AudioManager : MonoBehaviour
 
     // --- Shortcut methods ---
 
-    public void PlayButtonClick() => PlaySfx(buttonClick);
-    public void PlayWin()         => PlaySfx(winSfx);
-    public void PlayLose()        => PlaySfx(loseSfx);
-    public void PlayDrift()       => PlaySfx(driftSfx);
-    public void PlayCoinPickup()  => PlaySfx(coinPickupSfx);
+    public void PlayButtonClick()  => PlaySfx(buttonClick);
+    public void PlayWin()          => PlaySfx(winSfx);
+    public void PlayLose()         => PlaySfx(loseSfx);
+    public void PlayDrift()        => PlaySfx(driftSfx);
+    public void PlayCoinPickup()   => PlaySfx(coinPickupSfx);
+    public void PlayFuelPickup()   => PlaySfx(fuelPickupSfx);
+    public void PlayHeartPickup()  => PlaySfx(heartPickupSfx);
 }

@@ -1,17 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-/// <summary>
-/// Reusable settings popup. Supports two UI modes (assign whichever you use):
-///   - Slider mode:  drag musicSlider / sfxSlider to control volume (0-1)
-///   - Switch mode:  tap musicToggle / sfxToggle to turn on/off
-/// Both modes can coexist on the same panel. Leave unused fields empty.
-/// </summary>
 public class SettingsPopup : MonoBehaviour
 {
-    [Header("Open / Close")]
-    public Button openButton;
-    public Button closeButton;
     public GameObject settingsPanel;
 
     [Header("Slider Mode (volume)")]
@@ -30,10 +21,6 @@ public class SettingsPopup : MonoBehaviour
 
     void Start()
     {
-        if (openButton != null)  openButton.onClick.AddListener(Open);
-        if (closeButton != null) closeButton.onClick.AddListener(Close);
-
-        // Sliders
         if (musicSlider != null)
         {
             musicSlider.minValue = 0f;
@@ -47,16 +34,11 @@ public class SettingsPopup : MonoBehaviour
             sfxSlider.onValueChanged.AddListener(OnSfxSliderChanged);
         }
 
-        // Switch buttons
         if (musicToggle != null) musicToggle.onClick.AddListener(OnMusicToggle);
         if (sfxToggle != null)   sfxToggle.onClick.AddListener(OnSfxToggle);
 
-        if (settingsPanel != null) settingsPanel.SetActive(false);
-
         UpdateVisuals();
     }
-
-    // ─── Open / Close ───
 
     public void Open()
     {
@@ -74,19 +56,14 @@ public class SettingsPopup : MonoBehaviour
         Time.timeScale = savedTimeScale;
     }
 
-    // ─── Slider callbacks ───
-
     void OnMusicSliderChanged(float value)
     {
         if (AudioManager.instance == null) return;
         AudioManager.instance.SetMusicVolume(value);
-
-        // Auto-sync switch visuals when slider hits 0 or leaves 0
         if (AudioManager.instance.IsMusicOn && value <= 0f)
             AudioManager.instance.SetMusic(false);
         else if (!AudioManager.instance.IsMusicOn && value > 0f)
             AudioManager.instance.SetMusic(true);
-
         UpdateToggleVisuals();
     }
 
@@ -94,16 +71,12 @@ public class SettingsPopup : MonoBehaviour
     {
         if (AudioManager.instance == null) return;
         AudioManager.instance.SetSfxVolume(value);
-
         if (AudioManager.instance.IsSfxOn && value <= 0f)
             AudioManager.instance.SetSfx(false);
         else if (!AudioManager.instance.IsSfxOn && value > 0f)
             AudioManager.instance.SetSfx(true);
-
         UpdateToggleVisuals();
     }
-
-    // ─── Switch callbacks ───
 
     void OnMusicToggle()
     {
@@ -121,26 +94,19 @@ public class SettingsPopup : MonoBehaviour
         UpdateVisuals();
     }
 
-    // ─── Visual sync ───
-
     void UpdateVisuals()
     {
         if (AudioManager.instance == null) return;
-
-        // Sliders
         if (musicSlider != null) musicSlider.SetValueWithoutNotify(AudioManager.instance.MusicVolume);
         if (sfxSlider != null)   sfxSlider.SetValueWithoutNotify(AudioManager.instance.SfxVolume);
-
         UpdateToggleVisuals();
     }
 
     void UpdateToggleVisuals()
     {
         if (AudioManager.instance == null) return;
-
         bool musicOn = AudioManager.instance.IsMusicOn;
         bool sfxOn   = AudioManager.instance.IsSfxOn;
-
         if (musicOnState != null)  musicOnState.SetActive(musicOn);
         if (musicOffState != null) musicOffState.SetActive(!musicOn);
         if (sfxOnState != null)    sfxOnState.SetActive(sfxOn);

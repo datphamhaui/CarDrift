@@ -68,7 +68,7 @@ public class AutoDriveCarController : MonoBehaviour
         var rt = go.GetComponent<RectTransform>();
         rt.sizeDelta = Vector2.zero;
         return go;
-    }
+    } 
 
     void Start()
     {
@@ -107,8 +107,6 @@ public class AutoDriveCarController : MonoBehaviour
         stuckCheckTimer = 0f;
         lastCheckPosition = transform.position;
 
-        if (ScoreManager.Instance != null)
-            ScoreManager.Instance.StartScoring();
     }
 
     void OnGameStop()

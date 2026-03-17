@@ -18,13 +18,16 @@ public class GameUI : MonoBehaviour
     public Button pauseButton;
 
     [Header("HP & Speed Display (Speedometer)")]
-    [Tooltip("SpeedometerController: ring = speed, gas slider = HP")]
+    [Tooltip("SpeedometerController: ring = speed, gas slider = Fuel")]
     public SpeedometerController speedometerUI;
     [Tooltip("Max speed for normalizing the speedometer ring (km/h)")]
     public float maxSpeed = 200f;
 
-    [Header("HP Display (Legacy Slider - optional)")]
+    [Header("HP Display (Slider)")]
     public Slider hpSlider;
+
+    [Header("Fuel Display (Slider - optional fallback)")]
+    public Slider fuelSlider;
 
     [Header("Pause Panel")]
     public Button continueButton;
@@ -67,7 +70,7 @@ public class GameUI : MonoBehaviour
 
         carController = FindAnyObjectByType<PrometeoCarController>();
 
-        // Speedometer: ring = speed, gas slider = HP bar
+        // Speedometer: ring = speed, gas slider = Fuel bar
         if (speedometerUI != null)
         {
             speedometerUI.isGasSliderVisible = true;
@@ -78,10 +81,10 @@ public class GameUI : MonoBehaviour
             if (speedometerUI.currentGearText != null)
                 speedometerUI.currentGearText.text = "N";
 
-            UpdateGasHP(GameManager.Instance.maxHP, GameManager.Instance.maxHP);
+            UpdateGasFuel(GameManager.Instance.maxFuel, GameManager.Instance.maxFuel);
 
-            GameManager.Instance.OnHPChanged += (current, max) =>
-                UpdateGasHP(current, max);
+            GameManager.Instance.OnFuelChanged += (current, max) =>
+                UpdateGasFuel(current, max);
 
             GameManager.Instance.OnGameStart += () =>
             {
@@ -90,7 +93,7 @@ public class GameUI : MonoBehaviour
             };
         }
 
-        // Legacy slider fallback
+        // HP slider
         if (hpSlider != null)
         {
             hpSlider.minValue = 0;
@@ -101,6 +104,20 @@ public class GameUI : MonoBehaviour
             GameManager.Instance.OnHPChanged += (current, max) =>
             {
                 if (hpSlider != null) hpSlider.value = current;
+            };
+        }
+
+        // Fuel slider (optional fallback)
+        if (fuelSlider != null)
+        {
+            fuelSlider.minValue = 0;
+            fuelSlider.maxValue = GameManager.Instance.maxFuel;
+            fuelSlider.value = GameManager.Instance.maxFuel;
+            fuelSlider.interactable = false;
+
+            GameManager.Instance.OnFuelChanged += (current, max) =>
+            {
+                if (fuelSlider != null) fuelSlider.value = current;
             };
         }
     }
@@ -119,20 +136,20 @@ public class GameUI : MonoBehaviour
             speedometerUI.currentSpeedText.text = Mathf.RoundToInt(speed).ToString();
     }
 
-    void UpdateGasHP(int current, int max)
+    void UpdateGasFuel(float current, float max)
     {
         if (speedometerUI == null) return;
 
-        float ratio = max > 0 ? (float)current / max : 0f;
+        float ratio = max > 0f ? current / max : 0f;
         speedometerUI.GasSliderValue = ratio;
 
-        // Change gas slider color: green → red based on HP
-        Color hpColor = Color.Lerp(Color.red, Color.green, ratio);
-        speedometerUI.gasSliderColor = hpColor;
+        // Change gas slider color: green → red based on fuel level
+        Color fuelColor = Color.Lerp(Color.red, Color.green, ratio);
+        speedometerUI.gasSliderColor = fuelColor;
         if (speedometerUI.gasSliderImage != null)
-            speedometerUI.gasSliderImage.color = hpColor;
+            speedometerUI.gasSliderImage.color = fuelColor;
         if (speedometerUI.gasIcon != null)
-            speedometerUI.gasIcon.color = hpColor;
+            speedometerUI.gasIcon.color = fuelColor;
     }
 
     void Wire(Button btn, UnityEngine.Events.UnityAction action)

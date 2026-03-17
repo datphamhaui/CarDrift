@@ -1,15 +1,16 @@
 using UnityEngine;
-using UnityEngine.UI;
+using TMPro;
 
 public class ScoreManager : MonoBehaviour
 {
     public static ScoreManager Instance { get; private set; }
 
     [Header("UI")]
-    public Text scoreText;
+    [Tooltip("Text hiển thị dạng COLLECT: X/Y")]
+    public TMP_Text collectText;
 
-    public int CurrentScore { get; private set; }
     public int CoinCount { get; private set; }
+    public int TotalCoins { get; private set; }
 
     void Awake()
     {
@@ -23,43 +24,24 @@ public class ScoreManager : MonoBehaviour
 
     void Start()
     {
-        UpdateUI();
-    }
-
-    public void AddCoinScore(int points)
-    {
-        CoinCount++;
-        CurrentScore += points;
-        UpdateUI();
-    }
-
-    public void StartScoring()
-    {
-        CurrentScore = 0;
+        TotalCoins = FindObjectsOfType<CoinCollectible>().Length;
         CoinCount = 0;
         UpdateUI();
     }
 
-    public void StopScoring()
+    public void AddCoin()
     {
+        CoinCount++;
+        UpdateUI();
     }
 
-    public void SaveHighScore()
-    {
-        int levelIndex = UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex;
-        string key = "HighScore_Level" + levelIndex;
-        int highScore = PlayerPrefs.GetInt(key, 0);
+    public void StopScoring() { }
 
-        if (CurrentScore > highScore)
-        {
-            PlayerPrefs.SetInt(key, CurrentScore);
-            PlayerPrefs.Save();
-        }
-    }
+    public void SaveHighScore() { }
 
     void UpdateUI()
     {
-        if (scoreText != null)
-            scoreText.text = CurrentScore.ToString();
+        if (collectText != null)
+            collectText.text = $"COLLECT: {CoinCount}/{TotalCoins}";
     }
 }

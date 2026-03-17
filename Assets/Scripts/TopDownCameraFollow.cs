@@ -16,7 +16,7 @@ public class TopDownCameraFollow : MonoBehaviour
 
     float currentYRotation;
 
-    void LateUpdate()
+    void FixedUpdate()
     {
         if (carTransform == null) return;
 

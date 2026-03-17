@@ -18,9 +18,16 @@ public class GameManager : MonoBehaviour
     [Header("HP")]
     public int maxHP = 3;
 
+    [Header("Fuel")]
+    [Tooltip("Maximum fuel amount")]
+    public float maxFuel = 100f;
+    [Tooltip("Fuel consumed per second while driving")]
+    public float fuelDrainRate = 5f;
+
     public GameState CurrentState { get; private set; } = GameState.Ready;
     public bool IsPaused => CurrentState == GameState.Paused;
     public int CurrentHP { get; private set; }
+    public float CurrentFuel { get; private set; }
 
     public event Action OnGameStart;
     public event Action OnGameOver;
@@ -28,6 +35,7 @@ public class GameManager : MonoBehaviour
     public event Action OnGamePause;
     public event Action OnGameResume;
     public event Action<int, int> OnHPChanged; // (currentHP, maxHP)
+    public event Action<float, float> OnFuelChanged; // (currentFuel, maxFuel)
 
     void Awake()
     {
@@ -54,13 +62,46 @@ public class GameManager : MonoBehaviour
         {
             StartGame();
         }
+
+        if (CurrentState == GameState.Playing)
+        {
+            DrainFuel();
+        }
+    }
+
+    void DrainFuel()
+    {
+        CurrentFuel -= fuelDrainRate * Time.deltaTime;
+        CurrentFuel = Mathf.Max(0f, CurrentFuel);
+        OnFuelChanged?.Invoke(CurrentFuel, maxFuel);
+
+        if (CurrentFuel <= 0f)
+            TriggerGameOver();
+    }
+
+    public void AddFuel(float amount)
+    {
+        if (CurrentState != GameState.Playing) return;
+
+        CurrentFuel = Mathf.Min(maxFuel, CurrentFuel + amount);
+        OnFuelChanged?.Invoke(CurrentFuel, maxFuel);
+    }
+
+    public void AddHP(int amount = 1)
+    {
+        if (CurrentState != GameState.Playing) return;
+
+        CurrentHP = Mathf.Min(maxHP, CurrentHP + amount);
+        OnHPChanged?.Invoke(CurrentHP, maxHP);
     }
 
     public void StartGame()
     {
         Time.timeScale = 1f;
         CurrentHP = maxHP;
+        CurrentFuel = maxFuel;
         OnHPChanged?.Invoke(CurrentHP, maxHP);
+        OnFuelChanged?.Invoke(CurrentFuel, maxFuel);
         SetState(GameState.Playing);
         OnGameStart?.Invoke();
     }

@@ -11,7 +11,6 @@ using UnityEngine;
 /// </summary>
 public class CoinCollectible : MonoBehaviour
 {
-    public int scoreValue = 10;
     public float rotateSpeed = 180f;
     public float bobAmplitude = 0.3f;
     public float bobSpeed = 2f;
@@ -41,7 +40,7 @@ public class CoinCollectible : MonoBehaviour
             return;
 
         if (ScoreManager.Instance != null)
-            ScoreManager.Instance.AddCoinScore(scoreValue);
+            ScoreManager.Instance.AddCoin();
 
         if (AudioManager.instance != null)
             AudioManager.instance.PlayCoinPickup();
