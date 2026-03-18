@@ -63,6 +63,7 @@ public class GameUI : MonoBehaviour
     }
 
     PrometeoCarController carController;
+    int _lastSpeedInt = -1;
 
     void SetupHP()
     {
@@ -133,7 +134,14 @@ public class GameUI : MonoBehaviour
         speedometerUI.SpeedometerSliderValue = Mathf.Clamp01(speed / maxSpeed);
 
         if (speedometerUI.currentSpeedText != null)
-            speedometerUI.currentSpeedText.text = Mathf.RoundToInt(speed).ToString();
+        {
+            int speedInt = Mathf.RoundToInt(speed);
+            if (speedInt != _lastSpeedInt)
+            {
+                _lastSpeedInt = speedInt;
+                speedometerUI.currentSpeedText.text = speedInt.ToString();
+            }
+        }
     }
 
     void UpdateGasFuel(float current, float max)

@@ -29,6 +29,8 @@ public class GameManager : MonoBehaviour
     public int CurrentHP { get; private set; }
     public float CurrentFuel { get; private set; }
 
+    float _lastFuelNotified = -1f;
+
     public event Action OnGameStart;
     public event Action OnGameOver;
     public event Action OnGameWin;
@@ -73,7 +75,13 @@ public class GameManager : MonoBehaviour
     {
         CurrentFuel -= fuelDrainRate * Time.deltaTime;
         CurrentFuel = Mathf.Max(0f, CurrentFuel);
-        OnFuelChanged?.Invoke(CurrentFuel, maxFuel);
+
+        // Chỉ notify UI khi fuel thay đổi >= 0.5 unit, hoặc khi về 0
+        if (CurrentFuel <= 0f || Mathf.Abs(CurrentFuel - _lastFuelNotified) >= 0.5f)
+        {
+            _lastFuelNotified = CurrentFuel;
+            OnFuelChanged?.Invoke(CurrentFuel, maxFuel);
+        }
 
         if (CurrentFuel <= 0f)
             TriggerGameOver();
@@ -100,6 +108,7 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1f;
         CurrentHP = maxHP;
         CurrentFuel = maxFuel;
+        _lastFuelNotified = maxFuel;
         OnHPChanged?.Invoke(CurrentHP, maxHP);
         OnFuelChanged?.Invoke(CurrentFuel, maxFuel);
         SetState(GameState.Playing);

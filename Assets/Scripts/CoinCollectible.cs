@@ -15,23 +15,8 @@ public class CoinCollectible : MonoBehaviour
     public float bobAmplitude = 0.3f;
     public float bobSpeed = 2f;
 
-    Vector3 startPos;
-
-    void Start()
-    {
-        startPos = transform.position;
-    }
-
-    void Update()
-    {
-        // Spin
-        transform.Rotate(Vector3.up, rotateSpeed * Time.deltaTime, Space.World);
-
-        // Bob up and down
-        Vector3 pos = startPos;
-        pos.y += Mathf.Sin(Time.time * bobSpeed) * bobAmplitude;
-        transform.position = pos;
-    }
+    void Start()  => CollectibleAnimator.Register(transform, rotateSpeed, bobAmplitude, bobSpeed);
+    void OnDestroy() => CollectibleAnimator.Unregister(transform);
 
     void OnTriggerEnter(Collider other)
     {
