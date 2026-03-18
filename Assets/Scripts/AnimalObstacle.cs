@@ -97,6 +97,13 @@ public class AnimalObstacle : MonoBehaviour
     [Tooltip("Hướng cố định (local space) khi randomDirection = false")]
     public Vector3 fixedLocalDirection = Vector3.right;
 
+    // ── Road Boundary ─────────────────────────────────────────────────────────
+    [Header("Road Boundary")]
+    [Tooltip("Layer mask của mặt đường. Gán layer của mesh đường (vd: 'Road') vào đây để giới hạn con thú không ra ngoài đường.")]
+    public LayerMask roadLayerMask;
+    [Tooltip("Bật kiểm tra ranh giới đường")]
+    public bool checkRoadBoundary = true;
+
     // ── Internal ──────────────────────────────────────────────────────────────
     Animator _anim;
     Vector3  _spawnPos;
@@ -188,7 +195,7 @@ public class AnimalObstacle : MonoBehaviour
 
             SetAnim(animJump);
             Vector3 origin = transform.position;
-            Vector3 target = origin + dir * jumpDistance;
+            Vector3 target = ClampToRoad(origin, origin + dir * jumpDistance);
             FaceDir(dir);
 
             yield return MoveArc(origin, target, jumpHeight, jumpDuration);
@@ -207,11 +214,12 @@ public class AnimalObstacle : MonoBehaviour
     {
         SetAnim(animRun);
         Vector3 dir    = ChooseDirection();
-        Vector3 target = _spawnPos + dir * runDistance;
+        Vector3 target = ClampToRoad(_spawnPos, _spawnPos + dir * runDistance);
         FaceDir(dir);
 
+        float totalDist = Vector3.Distance(_spawnPos, target);
         float dist = 0f;
-        while (dist < runDistance && IsPlaying())
+        while (dist < totalDist && IsPlaying())
         {
             float step = runSpeed * Time.deltaTime;
             transform.position += dir * step;
@@ -244,7 +252,9 @@ public class AnimalObstacle : MonoBehaviour
             while (traveled < segDist && IsPlaying())
             {
                 float step = zigzagSpeed * Time.deltaTime;
-                transform.position += seg * step;
+                Vector3 nextPos = transform.position + seg * step;
+                if (!IsOnRoad(nextPos)) break;
+                transform.position = nextPos;
                 traveled += step;
                 yield return null;
             }
@@ -314,7 +324,7 @@ public class AnimalObstacle : MonoBehaviour
         SetAnim(animWalk);
         Vector3 dir     = ChooseDirection();
         Vector3 pointA  = _spawnPos;
-        Vector3 pointB  = _spawnPos + dir * patrolDistance;
+        Vector3 pointB  = ClampToRoad(_spawnPos, _spawnPos + dir * patrolDistance);
 
         while (IsPlaying())
         {
@@ -367,6 +377,29 @@ public class AnimalObstacle : MonoBehaviour
             yield return null;
         }
         transform.position = to;
+    }
+
+    // Kiểm tra vị trí pos có nằm trên mặt đường không (raycast xuống)
+    bool IsOnRoad(Vector3 pos)
+    {
+        if (!checkRoadBoundary || roadLayerMask == 0) return true;
+        Ray ray = new Ray(new Vector3(pos.x, pos.y + 3f, pos.z), Vector3.down);
+        return Physics.Raycast(ray, 6f, roadLayerMask);
+    }
+
+    // Tìm điểm xa nhất trên đoạn [from → to] vẫn còn trên đường
+    Vector3 ClampToRoad(Vector3 from, Vector3 to)
+    {
+        if (!checkRoadBoundary || roadLayerMask == 0 || IsOnRoad(to)) return to;
+        float lo = 0f, hi = 1f;
+        for (int i = 0; i < 8; i++)
+        {
+            float mid = (lo + hi) * 0.5f;
+            Vector3 candidate = Vector3.Lerp(from, to, mid);
+            if (IsOnRoad(candidate)) lo = mid;
+            else hi = mid;
+        }
+        return Vector3.Lerp(from, to, lo);
     }
 
     Vector3 ChooseDirection()

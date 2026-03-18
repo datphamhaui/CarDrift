@@ -1941,12 +1941,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1080, y: 1920}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -4076,22 +4076,22 @@ MonoBehaviour:
   - {fileID: 696859515}
   - {fileID: 82836431}
   levels:
-  - levelId: 0
-    isUnlocked: 1
-    sceneName: Map_1
   - levelId: 1
     isUnlocked: 0
-    sceneName: Map_2
+    sceneName: Map_1
   - levelId: 2
     isUnlocked: 0
-    sceneName: Map_3
+    sceneName: Map_2
   - levelId: 3
     isUnlocked: 0
-    sceneName: Map_4
+    sceneName: Map_3
   - levelId: 4
     isUnlocked: 0
-    sceneName: Map_5
+    sceneName: Map_4
   - levelId: 5
+    isUnlocked: 0
+    sceneName: Map_5
+  - levelId: 6
     isUnlocked: 0
     sceneName: Map_6
 --- !u!4 &1930710685
@@ -4497,7 +4497,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2123553963}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 68cceaddd159d4d389f09ba131169e13, type: 3}
   m_Name: 
@@ -4761,6 +4761,10 @@ PrefabInstance:
       propertyPath: openButton
       value: 
       objectReference: {fileID: 2134751790}
+    - target: {fileID: 4599712578350476158, guid: da5ce7d2d227a429ba49fd41cd72c763, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5407983783659196545, guid: da5ce7d2d227a429ba49fd41cd72c763, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5

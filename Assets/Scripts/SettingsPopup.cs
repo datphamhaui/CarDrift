@@ -17,6 +17,8 @@ public class SettingsPopup : MonoBehaviour
     public GameObject sfxOnState;
     public GameObject sfxOffState;
 
+    public static bool IsOpen { get; private set; }
+
     float savedTimeScale = 1f;
 
     void Start()
@@ -44,6 +46,7 @@ public class SettingsPopup : MonoBehaviour
     {
         if (AudioManager.instance != null) AudioManager.instance.PlayButtonClick();
         if (settingsPanel != null) settingsPanel.SetActive(true);
+        IsOpen = true;
         savedTimeScale = Time.timeScale;
         Time.timeScale = 0f;
         UpdateVisuals();
@@ -53,6 +56,7 @@ public class SettingsPopup : MonoBehaviour
     {
         if (AudioManager.instance != null) AudioManager.instance.PlayButtonClick();
         if (settingsPanel != null) settingsPanel.SetActive(false);
+        IsOpen = false;
         Time.timeScale = savedTimeScale;
     }
 

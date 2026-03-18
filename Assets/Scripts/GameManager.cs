@@ -197,6 +197,9 @@ public class GameManager : MonoBehaviour
     public void LoadNextLevel()
     {
         Time.timeScale = 1f;
+        int currentMap = PlayerPrefs.GetInt("selected_map", 0);
+        PlayerPrefs.SetInt("selected_map", currentMap + 1);
+        PlayerPrefs.Save();
         int nextIndex = SceneManager.GetActiveScene().buildIndex + 1;
         if (nextIndex < SceneManager.sceneCountInBuildSettings)
             SceneManager.LoadScene(nextIndex);

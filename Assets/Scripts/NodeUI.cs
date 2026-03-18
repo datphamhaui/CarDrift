@@ -32,6 +32,7 @@ public class NodeUI : MonoBehaviour
     void OnMouseDown()
     {
         if (data == null || !data.isUnlocked) return;
+        if (SettingsPopup.IsOpen) return;
         mapManager.OnNodeClicked(data);
     }
 }

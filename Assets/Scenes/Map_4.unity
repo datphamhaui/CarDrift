@@ -14005,7 +14005,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 261786959625234688, guid: 79d0ca8b77e301442afdb49f102e8aed, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.36
       objectReference: {fileID: 0}
     - target: {fileID: 261786959625234688, guid: 79d0ca8b77e301442afdb49f102e8aed, type: 3}
       propertyPath: m_LocalPosition.z
@@ -16173,7 +16173,7 @@ GameObject:
   - component: {fileID: 660309085}
   - component: {fileID: 660309082}
   - component: {fileID: 660309083}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Road_-1531734_LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17096,7 +17096,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9084508493061535917, guid: 5b46205eaba4c11459a428485431fbe5, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.62
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 9084508493061535917, guid: 5b46205eaba4c11459a428485431fbe5, type: 3}
       propertyPath: m_LocalPosition.z
@@ -20320,6 +20320,10 @@ MonoBehaviour:
   randomDirection: 1
   sidewaysBias: 0.65
   fixedLocalDirection: {x: 1, y: 0, z: 0}
+  roadLayerMask:
+    serializedVersion: 2
+    m_Bits: 8
+  checkRoadBoundary: 1
 --- !u!54 &900796235
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -22446,6 +22450,10 @@ MonoBehaviour:
   randomDirection: 1
   sidewaysBias: 0.65
   fixedLocalDirection: {x: 1, y: 0, z: 0}
+  roadLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
+  checkRoadBoundary: 1
 --- !u!64 &950750709
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -23711,6 +23719,10 @@ MonoBehaviour:
   randomDirection: 1
   sidewaysBias: 0.65
   fixedLocalDirection: {x: 1, y: 0, z: 0}
+  roadLayerMask:
+    serializedVersion: 2
+    m_Bits: 8
+  checkRoadBoundary: 1
 --- !u!64 &976001417
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -31584,6 +31596,10 @@ MonoBehaviour:
   randomDirection: 1
   sidewaysBias: 0.65
   fixedLocalDirection: {x: 1, y: 0, z: 0}
+  roadLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
+  checkRoadBoundary: 1
 --- !u!1001 &1308241249
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -37943,9 +37959,9 @@ RectTransform:
   - {fileID: 179026766}
   m_Father: {fileID: 271089349}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.5}
-  m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 489.5, y: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 714, y: 1280}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1587782756
@@ -37998,7 +38014,7 @@ GameObject:
   - component: {fileID: 1589192186}
   - component: {fileID: 1589192183}
   - component: {fileID: 1589192184}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Road_-1499420_LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43728,9 +43744,9 @@ RectTransform:
   - {fileID: 1562664445}
   m_Father: {fileID: 1013965223}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.5}
-  m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 489.5, y: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 714, y: 1280}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1795728969
@@ -48187,9 +48203,9 @@ RectTransform:
   - {fileID: 2093995264}
   m_Father: {fileID: 494871115}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -250.64948, y: 779.73645}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 238.35052, y: -279.26355}
   m_SizeDelta: {x: 427.7025, y: 71.428955}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2031293177
