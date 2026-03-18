@@ -61,7 +61,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Tex:
-        m_Texture: {fileID: 8900000, guid: 023aadc9a47114a069ba9daeba25d495, type: 3}
+        m_Texture: {fileID: 8900000, guid: 0c5d09cb07b564b25995b9d839b48c2f, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
